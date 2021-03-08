@@ -21,3 +21,5 @@ Single: Simulated Annealing, Tabu search.
 Simple: Linear Regression.
 
 TimeSeries: GM(1,1) prediction (grey prediction).
+### Mining
+BasicAssociationRule: Apriori, FP-Growth, Eclat and association rule generation.
