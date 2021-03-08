@@ -29,6 +29,7 @@ class SimulateAnnealing:
         np.random.seed(123456)
         T = self.__T0
         old_solution = copy.deepcopy(initial_solution)
+        old_fitness = fitness_fun(old_solution)
         best_solution = copy.deepcopy(initial_solution)
         best_loss = fitness_fun(best_solution)
         log_df = pd.DataFrame(dict.fromkeys(('Iteration', 'Old Loss', 'New Loss', 'p', 'Accept'), []))
@@ -42,7 +43,6 @@ class SimulateAnnealing:
             idx1, idx2 = idx[0], idx[1]
             new_solution = copy.deepcopy(old_solution)
             new_solution[idx1], new_solution[idx2] = new_solution[idx2], new_solution[idx1]
-            old_fitness = fitness_fun(old_solution)
             new_fitness = fitness_fun(new_solution)
             # Decide whether to accept the new solution
             if new_fitness < old_fitness:
@@ -50,6 +50,7 @@ class SimulateAnnealing:
                 log_df = log_df.append({'Iteration': iteration_idx, 'Old Loss': old_fitness,
                                         'New Loss': new_fitness, 'p': 1.0, 'Accept': 'yes'},
                                        ignore_index=True)
+                old_fitness = new_fitness
                 if new_fitness < best_loss:
                     best_loss = new_fitness
                     best_solution = copy.deepcopy(new_solution)
@@ -61,6 +62,7 @@ class SimulateAnnealing:
                     log_df = log_df.append({'Iteration': iteration_idx, 'Old Loss': old_fitness,
                                             'New Loss': new_fitness, 'p': p, 'Accept': 'yes'},
                                            ignore_index=True)
+                    old_fitness = new_fitness
                 else:
                     log_df = log_df.append({'Iteration': iteration_idx, 'Old Loss': old_fitness,
                                             'New Loss': new_fitness, 'p': p, 'Accept': 'no'},
